@@ -2,18 +2,18 @@ class DocsController < ApplicationController
     # Antes que se cargue elige el método a buscar el id
     before_action :find_doc, only: [:show, :edit, :update, :destroy]
     def index
-        @docs = Doc.all.order("created_at DESC") #Este doc es la tabla que se creo
+        @docs = Doc.where(user_id: current_user) #Este doc es la tabla que se creo y solo se muestra los creados por los usuarios
     end
 
     def show
     end
 
     def new
-        @doc = Doc.new
+        @doc = current_user.docs.build
     end
 
     def create
-        @doc = Doc.new(doc_params)
+        @doc = current_user.docs.build(doc_params)
 
         if @doc.save
             redirect_to @doc
